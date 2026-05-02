@@ -4,7 +4,7 @@ Exploratory PCA and *k*-means on pan-cancer platelet RNA-seq (GSE68086). Labels 
 
 ## Report
 
-**[Full project write-up → index.md](index.md)**
+**[Full project write-up](https://himash97.github.io/multicancer-rnaseq-clustering/)**
 
 ## How to run
 
