@@ -81,6 +81,10 @@ Interpretation. Cluster labels are produced without access to cancer type. They 
 
 [Open the interactive figure in a new tab](results/plots/pca_3d.html)
 
+Static 2D view (PC1 vs PC2, points colored by *k*-means cluster):
+
+![PCA scatter on PC1 and PC2, colored by cluster](results/plots/pca_plot.png)
+
 The figure encodes each sample as a point in the first three principal components—that is, the three-dimensional PCA embedding used for exploration after feature selection and scaling. Visually, points fall into two broad regions instead of a single unstructured cloud.
 
 One region is populated exclusively by tumor samples; healthy controls do not appear there. That pattern is compatible with the leading components capturing at least part of the expression difference between malignant and normal platelet profiles. The other region mixes cancers and healthy donors, which indicates that some malignancies lie near normal expression in this subspace, or that technical and biological variability limits how cleanly types separate in a three-axis view.
@@ -113,6 +117,12 @@ We fit *k*-means with *K* = 5 on the PCA scores, then compared cluster labels to
 | Lung | 1.69 | 27.12 | 40.68 | 3.39 | 27.12 |
 | Pancreatic | 0.00 | 60.61 | 39.39 | 0.00 | 0.00 |
 
+Same numbers as stacked bar charts:
+
+![Cluster composition by cluster (percent within each cluster)](results/plots/cluster_composition.png)
+
+![Category distribution by cancer type (percent across clusters)](results/plots/category_distribution.png)
+
 Cluster **0** is heterogeneous: healthy samples and GBM together make up most of its mass, so it behaves like a mixed partition rather than a single-disease niche.
 
 Cluster **1** concentrates a large share of CRC and pancreatic cases—more than half of all CRC and pancreatic samples are assigned here—so those two types look relatively similar to one another in the PCA coordinates that drive *k*-means.
@@ -124,3 +134,11 @@ Cluster **3** holds only a handful of points; it is dominated by healthy and lun
 Cluster **4** contains breast and lung material with **no** healthy donors, which is consistent with a partition that tracks disease-enriched variation while leaving normals elsewhere.
 
 Overall, *k*-means surfaces a few enrichments (notably CRC/pancreatic in one cluster, breast/lung in another without controls), but most labels are spread across several clusters. Expression in this reduced space therefore overlaps heavily across cancer types, and cluster identity should not be read as a clinical subtype.
+
+## Conclusion
+
+We asked a simple question: if we do **not** tell PCA or *k*-means the cancer labels, do the samples still group in a way that looks like biology? **Partly yes, partly no.** The plots show some separation between many tumors and healthy controls, and a few clusters lean toward specific cancers (for example CRC and pancreatic together; breast and lung together without healthy samples). But most cancer types are scattered across several clusters, so gene expression in this dataset does not line up with “one cluster = one cancer type.”
+
+That is still a useful outcome. It means platelet RNA signal is **shared** across diseases more than we might hope for clean diagnostic bins—especially after we shrink thousands of genes down to three PCA directions and only five clusters. This pipeline is for **exploration and description**, not for diagnosing patients.
+
+A future version could try other numbers of clusters, other dimensionality reductions, or simple scores that measure how well clusters match labels—but the main takeaway stays the same: unsupervised structure is **real but messy**, and labels should stay in the comparison step, not inside the clustering step.
